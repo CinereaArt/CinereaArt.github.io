@@ -19,9 +19,15 @@ export async function getStaticPaths() {
 const { work } = Astro.props;
 const data = work.data;
 const mainImage = data.imageFull || data.image || '/images/portfolio/placeholder.svg';
-const gallery = [
-  { src: mainImage, alt: `${data.title} — main image` },
-];
+
+// Se il progetto è stato generato dallo script ha una galleria completa;
+// altrimenti (progetti legacy) mostra la singola immagine principale.
+const gallery = data.gallery && data.gallery.length > 0
+  ? data.gallery.map((g, i) => ({
+      src: g.src,
+      alt: g.alt || `${data.title} — immagine ${i + 1}`,
+    }))
+  : [{ src: mainImage, alt: `${data.title} — main image` }];
 ---
 
 <BaseLayout title={data.title} description={data.description || `Project ${data.title} by Agnese Favilla (Cinerea).`}>

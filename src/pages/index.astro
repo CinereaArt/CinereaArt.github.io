@@ -94,10 +94,10 @@ const heroWork = allPortfolio.find((w) => w.data.featured) || allPortfolio[0];
         {gameArtWorks.length > 0 ? (
           gameArtWorks.map((w) => (
             <PortfolioCard
-              src="/images/thumbnails/placeholder.svg"
+              src={w.data.image || '/images/thumbnails/placeholder.svg'}
               alt={w.data.title}
               title={w.data.title}
-              full-src="/images/portfolio/placeholder.svg"
+              full-src={w.data.imageFull || w.data.image || '/images/portfolio/placeholder.svg'}
             />
           ))
         ) : (

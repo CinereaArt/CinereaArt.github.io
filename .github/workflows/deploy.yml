@@ -37,6 +37,20 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      # Python non serve installarlo (è preinstallato su ubuntu-latest);
+      # serve solo Pillow per ottimizzare le immagini WebP.
+      - name: Install Pillow (for portfolio generator)
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y python3-pillow
+
+      # Genera (o rigenera in modo idempotente) card e pagine-progetto dalle
+      # cartelle immagini in assets/portfolio/. Se le origini non sono presenti
+      # (checkout CI: la cartella è gitignorata) lo script esce senza toccare i
+      # .md già versionati, quindi il build resta valido.
+      - name: Generate portfolio (auto)
+        run: python3 scripts/generate_portfolio.py
+
       - name: Build site
         run: npm run build
 

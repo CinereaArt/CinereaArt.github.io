@@ -42,6 +42,11 @@ const portfolio = defineCollection({
       // Immagine full per il lightbox (path relativo a /public)
       imageFull: z.string().optional(),
 
+      // Galleria completa del progetto, in ordine di visualizzazione.
+      // Compilata dallo script generate_portfolio.py per i progetti generati.
+      // I progetti "legacy" (senza gallery) mostrano solo imageFull come fallback.
+      gallery: z.array(z.object({ src: z.string(), alt: z.string() })).optional(),
+
       // Se featured → compare nella homepage
       featured: z.boolean().default(false),
 

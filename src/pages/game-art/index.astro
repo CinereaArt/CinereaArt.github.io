@@ -10,8 +10,8 @@ const works = await getCollection('portfolio', ({ data }) =>
 
 const mapped = works.map((w) => ({
   title: w.data.title,
-  image: '/images/thumbnails/placeholder.svg',
-  fullImage: '/images/portfolio/placeholder.svg',
+  image: w.data.image || '/images/thumbnails/placeholder.svg',
+  fullImage: w.data.imageFull || w.data.image || '/images/portfolio/placeholder.svg',
   format: w.data.format || 'character-design',
   tags: [...w.data.tags, w.data.format || ''].filter(Boolean),
 }));

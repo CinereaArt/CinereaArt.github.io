@@ -16,9 +16,14 @@ export async function getStaticPaths() {
 const { work } = Astro.props;
 const data = work.data;
 const mainImage = data.imageFull || data.image || '/images/portfolio/placeholder.svg';
-const gallery = [
-  { src: mainImage, alt: `${data.title} — character main` },
-];
+
+// Per i progetti legacy (senza gallery) mostra la singola immagine principale.
+const gallery = data.gallery && data.gallery.length > 0
+  ? data.gallery.map((g, i) => ({
+      src: g.src,
+      alt: g.alt || `${data.title} — immagine ${i + 1}`,
+    }))
+  : [{ src: mainImage, alt: `${data.title} — character main` }];
 ---
 
 <BaseLayout title={data.title} description={data.description || `Game art project ${data.title} by Agnese Favilla (Cinerea).`}>
