@@ -1,0 +1,36 @@
+---
+// Game Art & Character Design — griglia 2 colonne + filtri
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import WorkGrid from '../../components/WorkGrid.astro';
+import { getCollection } from 'astro:content';
+
+const works = await getCollection('portfolio', ({ data }) =>
+  data.category === 'character-design'
+);
+
+const mapped = works.map((w) => ({
+  title: w.data.title,
+  image: '/images/thumbnails/placeholder.svg',
+  fullImage: '/images/portfolio/placeholder.svg',
+  format: w.data.format || 'character-design',
+  tags: [...w.data.tags, w.data.format || ''].filter(Boolean),
+}));
+
+const filters = [
+  { value: 'all', label: 'All' },
+  { value: 'character-design', label: 'Character Design' },
+  { value: 'environment', label: 'Environment' },
+  { value: 'props', label: 'Props & Items' },
+  { value: 'process', label: 'Process' },
+];
+---
+
+<BaseLayout title="Game Art & Character Design" description="Game art e character design di Agnese Favilla per il settore videoludico: concept art, personaggi e environments.">
+  <WorkGrid
+    title="Game Art &amp; Character Design"
+    description="Character design, concept art e environments per il settore videoludico. Personaggi, turnaround, color exploration e prop design."
+    works={mapped}
+    filters={filters}
+    layout="gameart"
+  />
+</BaseLayout>

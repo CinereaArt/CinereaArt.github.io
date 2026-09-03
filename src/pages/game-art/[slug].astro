@@ -1,0 +1,34 @@
+---
+// Route dinamica: /game-art/[slug]
+// Genera una pagina per ogni progetto di character design / game art
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ProjectPage from '../../components/ProjectPage.astro';
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+  const works = await getCollection('portfolio', ({ data }) => data.category === 'character-design');
+  return works.map((w) => ({
+    params: { slug: w.slug },
+    props: { work: w },
+  }));
+}
+
+const { work } = Astro.props;
+const data = work.data;
+const mainImage = data.imageFull || data.image || '/images/portfolio/placeholder.svg';
+const gallery = [
+  { src: mainImage, alt: `${data.title} — character main` },
+];
+---
+
+<BaseLayout title={data.title} description={data.description || `Game art project ${data.title} by Agnese Favilla (Cinerea).`}>
+  <ProjectPage
+    title={data.title}
+    category="Game Art & Character Design"
+    client={data.client}
+    year={data.year}
+    role={data.role}
+    description={data.description}
+    gallery={gallery}
+  />
+</BaseLayout>

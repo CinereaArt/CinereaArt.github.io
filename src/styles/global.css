@@ -1,0 +1,277 @@
+/* ============================================================
+   CINEREAART — Design System
+   Portfolio Agnese Favilla (Illustrazione + Game Art)
+   Palette: bianco caldo + terracotta | Tipografia: Inter
+   Base: 8px spacing | Mobile-first
+   ============================================================ */
+
+/* ---------- Design Tokens ---------- */
+:root {
+  /* Palette */
+  --color-bg: #fafaf8;            /* Background principale — bianco caldo */
+  --color-surface: #f2f1ef;       /* Card, sezioni alternate */
+  --color-text: #1a1a1a;          /* Testo primario — quasi nero */
+  --color-text-muted: #6b6b6b;    /* Testo secondario — grigio medio */
+  --color-accent: #c4704b;        /* Terracotta — link hover, CTA, highlights */
+  --color-border: #333333;        /* Bordi, linee separatorie */
+  --color-overlay: rgba(0, 0, 0, 0.92); /* Sfondo lightbox */
+  --color-success: #4a8c6f;
+  --color-error: #c44b4b;
+
+  /* Tipografia */
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-display: 'Playfair Display', Georgia, serif; /* solo per logo/wordmark */
+
+  /* Spacing (multipli di 8) */
+  --space-1: 0.25rem;   /* 4px */
+  --space-2: 0.5rem;    /* 8px */
+  --space-3: 0.75rem;   /* 12px */
+  --space-4: 1rem;      /* 16px */
+  --space-5: 1.5rem;    /* 24px */
+  --space-6: 2rem;      /* 32px */
+  --space-7: 3rem;      /* 48px */
+  --space-8: 5rem;      /* 80px */
+  --space-9: 7.5rem;    /* 120px */
+
+  /* Layout */
+  --container-max: 1200px;
+  --container-pad: var(--space-5);
+  --gap-section: var(--space-7);   /* 48px mobile, 120px desktop via media query */
+  --gap-grid: var(--space-4);      /* 16px */
+
+  /* Transizioni */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --transition-fast: 150ms ease-in-out;
+  --transition-base: 200ms var(--ease-out);
+  --transition-slow: 300ms var(--ease-out);
+
+  /* Radii */
+  --radius: 4px;
+
+  /* Header height (sticky) */
+  --header-h: 64px;
+  --header-h-mobile: 56px;
+}
+
+/* ---------- Reset ---------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+  /* Previene la scrollbar orizzontale inutile (overflow trasversale
+     dal menu mobile traslato fuori viewport, grid, ecc.) */
+  overflow-x: hidden;
+}
+
+body {
+  font-family: var(--font-sans);
+  background: var(--color-bg);
+  color: var(--color-text);
+  line-height: 1.6;
+  font-size: 1rem;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+img,
+svg {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+a:hover {
+  color: var(--color-accent);
+}
+
+ul,
+ol {
+  list-style: none;
+}
+
+/* Accessibilità: focus visibile */
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+/* Riduzione movimento (accessibilità) */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ---------- Skip link (accessibilità) ---------- */
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  background: var(--color-bg);
+  color: var(--color-text);
+  padding: var(--space-2) var(--space-4);
+  z-index: 300;
+  transition: left var(--transition-base);
+}
+
+.skip-link:focus {
+  left: 0;
+}
+
+/* ---------- Container ---------- */
+.container {
+  width: 100%;
+  max-width: var(--container-max);
+  margin-inline: auto;
+  padding-inline: var(--container-pad);
+}
+
+/* ---------- Tipografia ---------- */
+h1,
+h2,
+h3,
+h4 {
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--color-text);
+}
+
+h1 {
+  font-size: 2rem;      /* 32px */
+}
+
+h2 {
+  font-size: 1.5rem;    /* 24px */
+}
+
+h3 {
+  font-size: 1.25rem;   /* 20px */
+}
+
+.overline {
+  /* Piccola etichetta uppercase, tracking, usata per i titoli di sezione */
+  font-size: 0.75rem;   /* 12px */
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.section-title {
+  font-size: 1.75rem;
+  margin-bottom: var(--space-4);
+}
+
+/* ---------- Buttons / CTA ---------- */
+.btn {
+  display: inline-block;
+  padding: var(--space-3) var(--space-5);
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  border: 2px solid var(--color-text);
+  border-radius: var(--radius);
+  background: transparent;
+  color: var(--color-text);
+  cursor: pointer;
+  transition: all var(--transition-base);
+}
+
+.btn:hover {
+  background: var(--color-text);
+  color: var(--color-bg);
+  transform: translateY(-2px);
+}
+
+.btn--accent {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+}
+
+.btn--accent:hover {
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+  color: #fff;
+}
+
+/* ---------- Grid Portfolio ---------- */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: var(--gap-grid);
+}
+
+/* ---------- Sezioni ---------- */
+.section {
+  padding-block: var(--space-7);
+}
+
+.section__header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-3);
+  margin-bottom: var(--space-5);
+  flex-wrap: wrap;
+}
+
+.section__header .overline {
+  display: block;
+  margin-bottom: var(--space-2);
+}
+
+/* ---------- Media Queries (desktop ↑) ---------- */
+@media (min-width: 640px) {
+  .container {
+    padding-inline: var(--space-6);
+  }
+
+  h1 {
+    font-size: 2.75rem;
+  }
+
+  h2 {
+    font-size: 1.75rem;
+  }
+
+  .section-title {
+    font-size: 2rem;
+  }
+
+  .grid {
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  }
+
+  :root {
+    --gap-section: var(--space-9);  /* 120px desktop */
+    --container-pad: var(--space-6);
+  }
+}
+
+@media (min-width: 1024px) {
+  h1 {
+    font-size: 3rem;
+  }
+
+  .grid {
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  }
+}

@@ -1,0 +1,86 @@
+---
+// BaseLayout — shell comune per tutte le pagine
+// Gestisce head (SEO, OG, favicon), skip link, Header, contenuto e Footer
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import '../styles/global.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+  ogImage?: string;
+}
+
+const {
+  title = 'Cinerea — Agnese Favilla | Illustration & Game Art',
+  description = 'Portfolio di Agnese Favilla (Cinerea). Illustrazione per bambini ed editoriale, game art e character design per il settore videoludico.',
+  ogImage = '/images/og/default.png',
+} = Astro.props;
+
+const fullTitle = title.startsWith('Cinerea')
+  ? title
+  : `${title} — Cinerea`;
+---
+
+<!DOCTYPE html>
+<html lang="it">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- SEO -->
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={Astro.url} />
+
+    <!-- Open Graph (social sharing) -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Cinerea — Agnese Favilla" />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={Astro.url} />
+    <meta property="og:image" content={new URL(ogImage, Astro.site).toString()} />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={fullTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={new URL(ogImage, Astro.site).toString()} />
+
+    <!-- Favicon (placeholder — verrà aggiunto il true favicon) -->
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+
+    <!-- Font: Inter self-hosted via Google Fonts per ora (commentare per self-hosting) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Structured data: Person -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": "Agnese Favilla",
+        "alternateName": "Cinerea",
+        "jobTitle": "Illustrator & Game Artist",
+        "description": "Illustratrice e game artist. Illustrazione per bambini ed editoriale, character design per il settore videoludico.",
+        "url": "https://CinereaArt.github.io",
+        "worksFor": { "@type": "Organization", "name": "Cinerea" }
+      }
+    </script>
+  </head>
+
+  <body>
+    <a class="skip-link" href="#main">Salta al contenuto</a>
+    <Header />
+
+    <main id="main">
+      <slot />
+    </main>
+
+    <Footer />
+  </body>
+</html>

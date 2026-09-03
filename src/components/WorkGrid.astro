@@ -1,0 +1,178 @@
+---
+// WorkGrid — griglia portfolio con filtri a chips (client-side)
+// Usata nelle pagine di categoria.
+interface Props {
+  title: string;
+  description?: string;
+  works: {
+    title: string;
+    image: string;       // percorso thumb
+    fullImage?: string;  // percorso full per lightbox
+    format?: string;     // per filtri (es. picture-book, cover, spot)
+    tags?: string[];
+  }[];
+  filters?: { value: string; label: string }[];
+  layout?: 'masonry' | 'regular' | 'gameart';
+}
+const { title, description, works, filters, layout = 'regular' } = Astro.props;
+---
+
+<section class="work-section section">
+  <div class="container">
+    <header class="work-section__head">
+      <span class="overline">Portfolio</span>
+      <h1 class="work-section__title">{title}</h1>
+      {description && <p class="work-section__desc">{description}</p>}
+
+      {filters && filters.length > 0 && (
+        <div class="chips" role="group" aria-label="Filtra per tipo">
+          {filters.map((f, i) => (
+            <button class="chip" data-filter={f.value} data-active={i === 0 ? 'true' : 'false'}>
+              {f.label}
+            </button>
+          ))}
+        </div>
+      )}
+    </header>
+
+    <div class={`grid grid--${layout}`} style={layout === 'masonry' ? 'grid-auto-rows: 10px;' : undefined}>
+      {works.map((w, i) => (
+        <figure class="card" data-item data-format={w.format || ''} data-tags={(w.tags || []).join(' ')}>
+          <a class="card__media" href={w.fullImage || w.image} data-lightbox aria-label={w.title}>
+            <img src={w.image} alt={w.title} loading={i < 4 ? 'eager' : 'lazy'} decoding="async" />
+          </a>
+        </figure>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .work-section__head {
+    margin-bottom: var(--space-6);
+    max-width: 60ch;
+  }
+
+  .work-section__title {
+    font-size: 2rem;
+    margin-block: var(--space-2) var(--space-3);
+  }
+
+  .work-section__desc {
+    color: var(--color-text-muted);
+    margin-bottom: var(--space-5);
+  }
+
+  /* ---------- Chips / filtri ---------- */
+  .chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    margin-top: var(--space-3);
+  }
+
+  .chip {
+    padding: var(--space-2) var(--space-4);
+    font-size: 0.8125rem;
+    font-weight: 500;
+    border: 1px solid var(--color-border);
+    border-radius: 999px;
+    background: transparent;
+    color: var(--color-text);
+    cursor: pointer;
+    transition: all var(--transition-base);
+  }
+
+  .chip:hover {
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+  }
+
+  .chip[data-active='true'] {
+    background: var(--color-text);
+    border-color: var(--color-text);
+    color: var(--color-bg);
+  }
+
+  /* ---------- Card ---------- */
+  .card {
+    border-radius: var(--radius);
+    overflow: hidden;
+    background: var(--color-surface);
+    margin-bottom: var(--space-4);
+  }
+
+  .card.is-hidden {
+    display: none;
+  }
+
+  .card__media {
+    display: block;
+    overflow: hidden;
+    aspect-ratio: 4 / 5;
+    cursor: zoom-in;
+    background: var(--color-surface);
+  }
+
+  .card__media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform var(--transition-base);
+  }
+
+  .card:hover .card__media img {
+    transform: scale(1.03);
+  }
+
+  /* ---------- Layout variants ---------- */
+  .grid--regular {
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  }
+
+  /* Masonry: colonne CSS, per immagini di altezze diverse (children) */
+  .grid--masonry {
+    display: block;
+    column-count: 1;
+    column-gap: var(--space-4);
+  }
+
+  @media (min-width: 640px) {
+    .grid--masonry {
+      column-count: 2;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .grid--masonry {
+      column-count: 3;
+    }
+  }
+
+  /* Game art: 2 colonne + primo progetto large */
+  .grid--gameart {
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  }
+</style>
+
+<script>
+  // Filtri client-side (chips)
+  const chips = document.querySelectorAll('[data-filter]');
+  const items = document.querySelectorAll('[data-item]');
+
+  chips.forEach((chip) => {
+    chip.addEventListener('click', () => {
+      // Aggiorna stato attivo del pulsante
+      chips.forEach((c) => c.setAttribute('data-active', c === chip ? 'true' : 'false'));
+
+      const filter = chip.dataset.filter;
+      items.forEach((item) => {
+        const format = item.dataset.format || '';
+        const tags = item.dataset.tags || '';
+        const match =
+          filter === 'all' || format === filter || tags.split(' ').includes(filter);
+        item.classList.toggle('is-hidden', !match);
+      });
+    });
+  });
+</script>

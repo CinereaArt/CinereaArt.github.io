@@ -1,0 +1,63 @@
+# Workflow GitHub Actions: build Astro + deploy su GitHub Pages
+# Si attiva automaticamente a ogni push sul ramo main.
+# Node gira sui runner di GitHub (gratis su repo pubblico) — non serve installarlo localmente.
+
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+# Permessi: GitHub Pages richiede 'pages: write' e 'id-token: write'
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Una sola deployment alla volta
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  # Build del sito
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build site
+        run: npm run build
+
+      # Le immagini statiche vanno copiate nel build. Che siano grosse o piccole,
+      # Astro le serve da public/ senza elaborazione. Verifichiamo solo che dist/ esista.
+      - name: Configure Pages
+        uses: actions/configure-pages@v4
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./dist
+
+  # Deploy su GitHub Pages
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

@@ -1,0 +1,32 @@
+---
+// Editorial Illustration — griglia regolare 3 colonne + filtri
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import WorkGrid from '../../../components/WorkGrid.astro';
+import { getCollection } from 'astro:content';
+
+const works = await getCollection('portfolio', ({ data }) =>
+  data.category === 'illustration' && data.subcategory === 'editorial'
+);
+
+const mapped = works
+  .sort((a, b) => (b.data.date || 0) - (a.data.date || 0))
+  .map((w) => ({
+    title: w.data.title,
+    image: w.data.image || '/images/thumbnails/placeholder.svg',
+    fullImage: w.data.imageFull || w.data.image || '/images/portfolio/placeholder.svg',
+    format: 'all',
+    tags: [...w.data.tags],
+  }));
+
+const filters = [{ value: 'all', label: 'All' }];
+---
+
+<BaseLayout title="Editorial Illustration" description="Illustrazione editoriale di Agnese Favilla: riviste, copertine e lavoro per adulti.">
+  <WorkGrid
+    title="Editorial Illustration"
+    description="Illustrazione editoriale per un pubblico adulto: riviste, copertine, libri e progetti su commissione. Ricerca visiva, concetto e stile."
+    works={mapped}
+    filters={filters}
+    layout="regular"
+  />
+</BaseLayout>

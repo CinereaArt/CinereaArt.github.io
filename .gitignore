@@ -1,0 +1,17 @@
+# Dipendenze
+node_modules/
+
+# Build
+dist/
+.astro/
+
+# Log
+*.log
+npm-debug.log*
+
+# Sistema
+.DS_Store
+Thumbs.db
+
+# Immagini originali (non versionate — le ottimizzate vanno in public/images)
+assets/originals/

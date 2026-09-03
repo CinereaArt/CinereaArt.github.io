@@ -1,0 +1,289 @@
+---
+// Homepage — hub del portfolio
+// Hero + 3 sezioni preview (Children's / Game Art / Editorial) + About + Contact
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+import PortfolioCard from '../components/PortfolioCard.astro';
+
+// Carica i lavori dal content collection
+const allPortfolio = await getCollection('portfolio');
+
+const childrenWorks = allPortfolio
+  .filter((w) => w.data.category === 'illustration' && w.data.subcategory === 'children')
+  .sort((a, b) => (b.data.date || 0) - (a.data.date || 0))
+  .slice(0, 4);
+
+const editorialWorks = allPortfolio
+  .filter((w) => w.data.category === 'illustration' && w.data.subcategory === 'editorial')
+  .sort((a, b) => (b.data.date || 0) - (a.data.date || 0))
+  .slice(0, 4);
+
+const gameArtWorks = allPortfolio
+  .filter((w) => w.data.category === 'character-design')
+  .sort((a, b) => (b.data.date || 0) - (a.data.date || 0))
+  .slice(0, 3);
+
+// Hero image: la prima featured migliore
+const heroWork = allPortfolio.find((w) => w.data.featured) || allPortfolio[0];
+---
+
+<BaseLayout>
+  <!-- ================= HERO ================= -->
+  <section class="hero">
+    <div class="container hero__grid">
+      <div class="hero__content">
+        <h1 class="hero__title">Agnese Favilla<br /><span class="hero__accent">creates worlds</span><br />across pages and screens.</h1>
+        <p class="hero__sub">Illustration &amp; Game Art — dalla narrazione per bambini all’editoriale, dal character design per il videogioco al concept art.</p>
+        <div class="hero__cta">
+          <a class="btn btn--accent" href="/illustration/children">Illustration</a>
+          <a class="btn" href="/game-art">Game Art</a>
+        </div>
+      </div>
+
+      <div class="hero__media">
+        <img
+          src={heroWork?.data?.imageFull || heroWork?.data?.image || '/images/portfolio/hero-placeholder.svg'}
+          alt="Illustrazione di Agnese Favilla"
+          width="1200"
+          height="1200"
+          loading="eager"
+          decoding="async"
+        />
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= CHILDREN'S ILLUSTRATION ================= -->
+  <section class="section">
+    <div class="container">
+      <div class="section__header">
+        <div>
+          <span class="overline">Illustration</span>
+          <h2 class="section-title">Children’s Illustration</h2>
+        </div>
+        <a class="link-more" href="/illustration/children">View All →</a>
+      </div>
+      <div class="grid">
+        {childrenWorks.length > 0 ? (
+          childrenWorks.map((w) => (
+            <PortfolioCard
+              src={w.data.image || '/images/thumbnails/placeholder.svg'}
+              alt={w.data.title}
+              title={w.data.title}
+              full-src={w.data.imageFull || w.data.image || '/images/portfolio/placeholder.svg'}
+            />
+          ))
+        ) : (
+          <p class="empty-msg">In arrivo — collezione in organizzazione.</p>
+        )}
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= GAME ART ================= -->
+  <section class="section section--alt">
+    <div class="container">
+      <div class="section__header">
+        <div>
+          <span class="overline">Game Art</span>
+          <h2 class="section-title">Game Art &amp; Character Design</h2>
+        </div>
+        <a class="link-more" href="/game-art">View All →</a>
+      </div>
+      <div class="grid grid--gameart">
+        {gameArtWorks.length > 0 ? (
+          gameArtWorks.map((w) => (
+            <PortfolioCard
+              src="/images/thumbnails/placeholder.svg"
+              alt={w.data.title}
+              title={w.data.title}
+              full-src="/images/portfolio/placeholder.svg"
+            />
+          ))
+        ) : (
+          <p class="empty-msg">In arrivo — personaggi e concept art.</p>
+        )}
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= EDITORIAL ================= -->
+  <section class="section">
+    <div class="container">
+      <div class="section__header">
+        <div>
+          <span class="overline">Illustration</span>
+          <h2 class="section-title">Editorial Illustration</h2>
+        </div>
+        <a class="link-more" href="/illustration/editorial">View All →</a>
+      </div>
+      <div class="grid">
+        {editorialWorks.length > 0 ? (
+          editorialWorks.map((w) => (
+            <PortfolioCard
+              src={w.data.image || '/images/thumbnails/placeholder.svg'}
+              alt={w.data.title}
+              title={w.data.title}
+              full-src={w.data.imageFull || w.data.image || '/images/portfolio/placeholder.svg'}
+            />
+          ))
+        ) : (
+          <p class="empty-msg">In arrivo — editoriale e copertine.</p>
+        )}
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= ABOUT PREVIEW ================= -->
+  <section class="section section--alt">
+    <div class="container about-preview">
+      <div class="about-preview__media">
+        <img src="/images/portfolio/portrait-placeholder.svg" alt="Ritratto di Agnese Favilla" loading="lazy" decoding="async" />
+      </div>
+      <div class="about-preview__body">
+        <span class="overline">About</span>
+        <h2 class="section-title">Agnese Favilla</h2>
+        <p>Illustratrice e game artist. Racconta storie per bambini, realizza illustrazioni editoriali e progetta personaggi per il mondo videoludico.</p>
+        <p class="about-preview__more">
+          <a class="link-more" href="/about">Read More →</a>
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= CONTACT CTA ================= -->
+  <section class="section">
+    <div class="container contact-cta">
+      <h2 class="section-title">Feel free to send me a message</h2>
+      <p>Per collaborazioni, editoria e game projects.</p>
+      <a class="btn btn--accent" href="/contact">Get in touch</a>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  /* ---------- Hero ---------- */
+  .hero {
+    padding-block: var(--space-6);
+  }
+
+  .hero__grid {
+    display: grid;
+    gap: var(--space-6);
+    align-items: center;
+  }
+
+  .hero__title {
+    font-size: 2.25rem;
+    line-height: 1.15;
+    margin-bottom: var(--space-4);
+  }
+
+  .hero__accent {
+    color: var(--color-accent);
+  }
+
+  .hero__sub {
+    color: var(--color-text-muted);
+    font-size: 1.0625rem;
+    max-width: 34ch;
+    margin-bottom: var(--space-5);
+  }
+
+  .hero__cta {
+    display: flex;
+    gap: var(--space-3);
+    flex-wrap: wrap;
+  }
+
+  .hero__media img {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    border-radius: var(--radius);
+    background: var(--color-surface);
+  }
+
+  /* ---------- Sezioni ---------- */
+  .section--alt {
+    background: var(--color-surface);
+  }
+
+  .grid--gameart {
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  }
+
+  .link-more {
+    font-weight: 600;
+    font-size: 0.9375rem;
+    color: var(--color-text);
+    white-space: nowrap;
+  }
+
+  .link-more:hover {
+    color: var(--color-accent);
+  }
+
+  .empty-msg {
+    color: var(--color-text-muted);
+    font-style: italic;
+    grid-column: 1 / -1;
+  }
+
+  /* ---------- About preview ---------- */
+  .about-preview {
+    display: grid;
+    gap: var(--space-6);
+    align-items: center;
+  }
+
+  .about-preview__media img {
+    width: 100%;
+    max-width: 420px;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    border-radius: var(--radius);
+    margin-inline: auto;
+  }
+
+  .about-preview__body p {
+    color: var(--color-text-muted);
+    margin-bottom: var(--space-3);
+    max-width: 50ch;
+  }
+
+  .about-preview__more {
+    margin-top: var(--space-4);
+  }
+
+  /* ---------- Contact CTA ---------- */
+  .contact-cta {
+    text-align: center;
+    padding-block: var(--space-5);
+  }
+
+  .contact-cta p {
+    color: var(--color-text-muted);
+    margin-bottom: var(--space-5);
+  }
+
+  /* ---------- Desktop ---------- */
+  @media (min-width: 640px) {
+    .hero {
+      padding-block: var(--space-8);
+    }
+
+    .hero__grid {
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-8);
+    }
+
+    .hero__title {
+      font-size: 3rem;
+    }
+
+    .about-preview {
+      grid-template-columns: 1fr 1.5fr;
+    }
+  }
+</style>

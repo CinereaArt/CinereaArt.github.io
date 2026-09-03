@@ -1,0 +1,32 @@
+---
+// Children's Illustration — griglia masonry + filtri per formato
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import WorkGrid from '../../../components/WorkGrid.astro';
+import { getCollection } from 'astro:content';
+
+const works = await getCollection('portfolio', ({ data }) =>
+  data.category === 'illustration' && data.subcategory === 'children'
+);
+
+const mapped = works
+  .sort((a, b) => (b.data.date || 0) - (a.data.date || 0))
+  .map((w) => ({
+    title: w.data.title,
+    image: w.data.image || '/images/thumbnails/placeholder.svg',
+    fullImage: w.data.imageFull || w.data.image || '/images/portfolio/placeholder.svg',
+    format: 'all',
+    tags: [...w.data.tags],
+  }));
+
+const filters = [{ value: 'all', label: 'All' }];
+---
+
+<BaseLayout title="Children's Illustration" description="Illustrazioni per bambini di Agnese Favilla: picture books, copertine e storie per l'infanzia.">
+  <WorkGrid
+    title="Children’s Illustration"
+    description="Illustrazioni per l'infanzia: picture books, albi illustrati, copertine e spot illustration. Un mondo colorato e narrativo per i più piccoli."
+    works={mapped}
+    filters={filters}
+    layout="masonry"
+  />
+</BaseLayout>

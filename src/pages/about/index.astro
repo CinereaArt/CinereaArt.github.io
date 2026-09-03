@@ -1,0 +1,278 @@
+---
+// About — bio, foto, pubblicazioni, case editrici
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const publications = (await getCollection('publications'))
+  .sort((a, b) => (b.data.year || 0) - (a.data.year || 0));
+
+const publishers = (await getCollection('publishers'))
+  .sort((a, b) => (a.data.order || 0) - (b.data.order || 0));
+---
+
+<BaseLayout title="About" description="Chi è Agnese Favilla (Cinerea): illustratrice e game artist. Bio, esperienza e clienti.">
+  <section class="section">
+    <div class="container about">
+      <div class="about__media">
+        <img src="/images/portfolio/cinerea.webp" alt="Ritratto di Agnese Favilla (Cinerea)" loading="lazy" decoding="async" />
+      </div>
+
+      <div class="about__body">
+        <span class="overline">About</span>
+        <h1 class="about__title">Agnese Favilla</h1>
+        <p class="about__aka">in arte <strong>Cinerea</strong></p>
+
+        <div class="about__text">
+          <p>
+            Sono un'illustratrice e game artist. Mi muovo tra due mondi che amo molto:
+            la <strong>narrazione illustrata</strong> — dagli albi per l'infanzia
+            all'editoriale per un pubblico adulto — e la <strong>game art</strong>,
+            dove do forma a personaggi e mondi per il settore videoludico.
+          </p>
+          <p>
+            Ogni progetto parte sempre dalla storia: che sia una pagina di un
+            picture book o un concept per un personaggio, cerco di costruire
+            un'immagine che parli, emozioni e viva oltre lo schermo o la carta.
+          </p>
+          <p>
+            Lavoro con editori, studi di gioco e clienti editoriali, sia in
+            Italia che all'estero.
+          </p>
+        </div>
+
+        <div class="about__meta">
+          <a class="btn btn--accent" href="/contact">Work with me</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Skills / aree -->
+  <section class="section section--alt">
+    <div class="container">
+      <span class="overline">Cosa faccio</span>
+      <h2 class="section-title">Discipline</h2>
+      <div class="skills">
+        <div class="skill-card">
+          <h3>Children's Illustration</h3>
+          <p>Albi illustrati, picture books, copertine e spot per l'infanzia.</p>
+        </div>
+        <div class="skill-card">
+          <h3>Editorial Illustration</h3>
+          <p>Riviste, copertine, libri e illustrazioni per un pubblico adulto.</p>
+        </div>
+        <div class="skill-card">
+          <h3>Character Design</h3>
+          <p>Personaggi, turnaround, color exploration e concept per giochi.</p>
+        </div>
+        <div class="skill-card">
+          <h3>Environment &amp; Props</h3>
+          <p>Ambienti, props e mondo visuale per il settore videoludico.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= PUBBLICAZIONI ================= -->
+  <section class="section">
+    <div class="container">
+      <span class="overline">Pubblicazioni</span>
+      <h2 class="section-title">Libri &amp; pubblicazioni</h2>
+      <div class="pub-list">
+        {publications.length > 0 ? (
+          publications.map((p) => (
+            <article class="pub-item">
+              <div class="pub-item__main">
+                <h3 class="pub-item__title">{p.data.title}</h3>
+                <p class="pub-item__pub">
+                  {p.data.publisher}{p.data.year ? ` · ${p.data.year}` : ''}
+                  {p.data.role ? ` · ${p.data.role}` : ''}
+                </p>
+                <p class="pub-item__body">{p.body}</p>
+              </div>
+              {p.data.link && (
+                <a class="pub-item__link" href={p.data.link} target="_blank" rel="noopener">Vedi →</a>
+              )}
+            </article>
+          ))
+        ) : (
+          <p class="empty-msg">Le pubblicazioni saranno elencate qui.</p>
+        )}
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= CASE EDITRICI ================= -->
+  <section class="section section--alt">
+    <div class="container">
+      <span class="overline">Collaborazioni</span>
+      <h2 class="section-title">Case editrici</h2>
+      <div class="publisher-grid">
+        {publishers.length > 0 ? (
+          publishers.map((p) => (
+            <a class="publisher-card" href={p.data.url || '#'} target="_blank" rel="noopener">
+              <h3 class="publisher-card__name">{p.data.name}</h3>
+              {p.data.note && <p class="publisher-card__note">{p.data.note}</p>}
+            </a>
+          ))
+        ) : (
+          <p class="empty-msg">Le case editrici saranno elencate qui.</p>
+        )}
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .about {
+    display: grid;
+    gap: var(--space-6);
+    align-items: start;
+  }
+
+  .about__media img {
+    width: 100%;
+    max-width: 420px;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    border-radius: var(--radius);
+  }
+
+  .about__title {
+    font-size: 2.25rem;
+    margin-block: var(--space-2) var(--space-1);
+  }
+
+  .about__aka {
+    color: var(--color-accent);
+    font-weight: 500;
+    margin-bottom: var(--space-5);
+  }
+
+  .about__text p {
+    color: var(--color-text-muted);
+    margin-bottom: var(--space-4);
+    max-width: 56ch;
+  }
+
+  .about__meta {
+    display: flex;
+    gap: var(--space-3);
+    flex-wrap: wrap;
+    margin-top: var(--space-5);
+  }
+
+  .skills {
+    display: grid;
+    gap: var(--space-4);
+    margin-top: var(--space-5);
+  }
+
+  .skill-card {
+    background: var(--color-bg);
+    border-radius: var(--radius);
+    padding: var(--space-5);
+    border: 1px solid var(--color-surface);
+  }
+
+  .skill-card h3 {
+    font-size: 1.125rem;
+    margin-bottom: var(--space-2);
+  }
+
+  .skill-card p {
+    color: var(--color-text-muted);
+    font-size: 0.9375rem;
+  }
+
+  @media (min-width: 640px) {
+    .about {
+      grid-template-columns: 1fr 1.5fr;
+    }
+
+    .skills {
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    }
+  }
+
+  /* ---------- Pubblicazioni ---------- */
+  .pub-list {
+    margin-top: var(--space-5);
+    display: flex;
+    flex-direction: column;
+  }
+
+  .pub-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: var(--space-4);
+    padding: var(--space-4) 0;
+    border-bottom: 1px solid var(--color-surface);
+  }
+
+  .pub-item__title {
+    font-size: 1.125rem;
+    margin-bottom: var(--space-1);
+  }
+
+  .pub-item__pub {
+    color: var(--color-accent);
+    font-size: 0.875rem;
+    font-weight: 500;
+    margin-bottom: var(--space-2);
+  }
+
+  .pub-item__body {
+    color: var(--color-text-muted);
+    font-size: 0.9375rem;
+    max-width: 60ch;
+  }
+
+  .pub-item__link {
+    color: var(--color-text);
+    font-weight: 500;
+    font-size: 0.875rem;
+    white-space: nowrap;
+  }
+
+  .pub-item__link:hover {
+    color: var(--color-accent);
+  }
+
+  /* ---------- Case editrici ---------- */
+  .publisher-grid {
+    display: grid;
+    gap: var(--space-4);
+    margin-top: var(--space-5);
+  }
+
+  .publisher-card {
+    display: block;
+    background: var(--color-bg);
+    border: 1px solid var(--color-surface);
+    border-radius: var(--radius);
+    padding: var(--space-5);
+    transition: border-color var(--transition-base);
+  }
+
+  .publisher-card:hover {
+    border-color: var(--color-accent);
+  }
+
+  .publisher-card__name {
+    font-size: 1.125rem;
+    margin-bottom: var(--space-1);
+  }
+
+  .publisher-card__note {
+    color: var(--color-text-muted);
+    font-size: 0.875rem;
+  }
+
+  @media (min-width: 640px) {
+    .publisher-grid {
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    }
+  }
+</style>

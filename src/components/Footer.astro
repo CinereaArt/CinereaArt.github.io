@@ -1,0 +1,128 @@
+---
+// Footer — contatti + social + copyright
+const socials = [
+  { label: 'Instagram', href: 'https://www.instagram.com/cinerea__/' },
+  { label: 'Behance', href: '#', external: true },
+  { label: 'ArtStation', href: '#', external: true },
+]
+---
+
+<footer class="site-footer">
+  <div class="container site-footer__grid">
+    <div class="site-footer__brand">
+      <span class="site-footer__wordmark">Cinerea</span>
+      <p class="site-footer__tagline">Agnese Favilla — Illustration &amp; Game Art</p>
+    </div>
+
+    <nav class="site-footer__nav" aria-label="Footer">
+      <ul class="site-footer__links">
+        <li><a href="/illustration/children">Children’s Illustration</a></li>
+        <li><a href="/illustration/editorial">Editorial Illustration</a></li>
+        <li><a href="/game-art">Game Art &amp; Character Design</a></li>
+        <li><a href="/about">About</a></li>
+        <li><a href="/contact">Contact</a></li>
+      </ul>
+    </nav>
+
+    <div class="site-footer__contact">
+      <a class="site-footer__email" href="mailto:favillaagnese@gmail.com">favillaagnese@gmail.com</a>
+      <ul class="site-footer__social">
+        {socials.map((s) => (
+          <li key={s.label}>
+            <a href={s.href} target={s.external ? '_blank' : undefined} rel={s.external ? 'noopener noreferrer' : undefined}>
+              {s.label}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </div>
+
+  <div class="container site-footer__bottom">
+    <p>© {new Date().getFullYear()} Cinerea — Agnese Favilla</p>
+    <p class="site-footer__credit">Illustration &amp; Game Art Portfolio</p>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    border-top: 1px solid var(--color-surface);
+    padding-top: var(--space-7);
+    margin-top: var(--space-8);
+  }
+
+  .site-footer__grid {
+    display: grid;
+    gap: var(--space-6);
+    padding-bottom: var(--space-6);
+  }
+
+  .site-footer__wordmark {
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    font-weight: 700;
+  }
+
+  .site-footer__tagline {
+    color: var(--color-text-muted);
+    font-size: 0.875rem;
+    margin-top: var(--space-1);
+  }
+
+  .site-footer__links {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .site-footer__links a {
+    font-size: 0.9375rem;
+    color: var(--color-text);
+  }
+
+  .site-footer__links a:hover {
+    color: var(--color-accent);
+  }
+
+  .site-footer__email {
+    font-weight: 500;
+    font-size: 1rem;
+  }
+
+  .site-footer__social {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    margin-top: var(--space-4);
+  }
+
+  .site-footer__social a {
+    color: var(--color-text-muted);
+    font-size: 0.875rem;
+  }
+
+  .site-footer__social a:hover {
+    color: var(--color-accent);
+  }
+
+  .site-footer__bottom {
+    border-top: 1px solid var(--color-surface);
+    padding-block: var(--space-4);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+    font-size: 0.75rem;
+    color: var(--color-text-muted);
+  }
+
+  @media (min-width: 640px) {
+    .site-footer__grid {
+      grid-template-columns: 1fr 1fr 1fr;
+    }
+
+    .site-footer__bottom {
+      flex-direction: row;
+      justify-content: space-between;
+    }
+  }
+</style>

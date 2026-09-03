@@ -1,0 +1,154 @@
+---
+// Contact — form + email diretta
+// Sito statico: il form compone una mailto (nessun backend).
+// In futuro si può collegare Formspree/Netlify Forms senza modificare la struttura.
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const email = 'favillaagnese@gmail.com';
+const emailLink = `mailto:${email}`;
+---
+
+<BaseLayout title="Contact" description="Contatta Agnese Favilla (Cinerea) per collaborazioni editoriali e game projects.">
+  <section class="section">
+    <div class="container contact">
+      <div class="contact__intro">
+        <span class="overline">Contact</span>
+        <h1 class="contact__title">Let’s work together</h1>
+        <p>
+          Hai un progetto editoriale, un albo illustrato o un gioco in sviluppo?
+          Raccontami l'idea — rispondo solitamente entro 2&ndash;3 giorni lavorativi.
+        </p>
+        <ul class="contact__details">
+          <li>
+            <strong>Email</strong>
+            <a href={emailLink}>{email}</a>
+          </li>
+          <li>
+            <strong>Social</strong>
+            <span>Instagram — Behance — ArtStation</span>
+          </li>
+        </ul>
+      </div>
+
+      <form class="contact__form" method="post" action={emailLink}>
+        <div class="contact__field">
+          <label for="name">Nome</label>
+          <input type="text" id="name" name="name" required autocomplete="name" />
+        </div>
+
+        <div class="contact__field">
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email" required autocomplete="email" />
+        </div>
+
+        <div class="contact__field">
+          <label for="subject">Tipo di progetto</label>
+          <select id="subject" name="subject">
+            <option>Children's Illustration</option>
+            <option>Editorial Illustration</option>
+            <option>Game Art / Character Design</option>
+            <option>Altro</option>
+          </select>
+        </div>
+
+        <div class="contact__field">
+          <label for="message">Messaggio</label>
+          <textarea id="message" name="body" rows="6" required></textarea>
+        </div>
+
+        <button class="btn btn--accent" type="submit">Send message</button>
+        <p class="contact__note">Il form apre il tuo client email con il messaggio già composto.</p>
+      </form>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .contact {
+    display: grid;
+    gap: var(--space-7);
+  }
+
+  .contact__title {
+    font-size: 2.25rem;
+    margin-block: var(--space-2) var(--space-4);
+  }
+
+  .contact__intro p {
+    color: var(--color-text-muted);
+    max-width: 46ch;
+    margin-bottom: var(--space-6);
+  }
+
+  .contact__details {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-5);
+  }
+
+  .contact__details strong {
+    display: block;
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+    margin-bottom: var(--space-1);
+  }
+
+  .contact__details a {
+    font-weight: 500;
+  }
+
+  /* ---------- Form ---------- */
+  .contact__form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+
+  .contact__field {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .contact__field label {
+    font-size: 0.875rem;
+    font-weight: 500;
+  }
+
+  .contact__field input,
+  .contact__field select,
+  .contact__field textarea {
+    padding: var(--space-3);
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    background: var(--color-bg);
+    color: var(--color-text);
+    transition: border-color var(--transition-base);
+  }
+
+  .contact__field input:focus,
+  .contact__field textarea:focus,
+  .contact__field select:focus {
+    outline: none;
+    border-color: var(--color-accent);
+  }
+
+  .contact__form .btn {
+    align-self: flex-start;
+  }
+
+  .contact__note {
+    font-size: 0.8125rem;
+    color: var(--color-text-muted);
+  }
+
+  @media (min-width: 640px) {
+    .contact {
+      grid-template-columns: 1fr 1.5fr;
+    }
+  }
+</style>

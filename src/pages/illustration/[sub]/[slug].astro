@@ -1,0 +1,37 @@
+---
+// Route dinamica: /illustration/[sub]/[slug]
+// Genera una pagina per ogni progetto graphic della categoria illustration
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import ProjectPage from '../../../components/ProjectPage.astro';
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+  const works = await getCollection('portfolio', ({ data }) => data.category === 'illustration');
+  return works.map((w) => ({
+    params: {
+      sub: w.data.subcategory || 'children',
+      slug: w.slug,
+    },
+    props: { work: w },
+  }));
+}
+
+const { work } = Astro.props;
+const data = work.data;
+const mainImage = data.imageFull || data.image || '/images/portfolio/placeholder.svg';
+const gallery = [
+  { src: mainImage, alt: `${data.title} — immagine principale` },
+];
+---
+
+<BaseLayout title={data.title} description={data.description || `Project ${data.title} by Agnese Favilla (Cinerea).`}>
+  <ProjectPage
+    title={data.title}
+    category={data.subcategory === 'children' ? "Children's Illustration" : "Editorial Illustration"}
+    client={data.client}
+    year={data.year}
+    role={data.role}
+    description={data.description}
+    gallery={gallery}
+  />
+</BaseLayout>

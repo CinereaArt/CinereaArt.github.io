@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="1200" viewBox="0 0 1200 1200">
+  <rect width="1200" height="1200" fill="#f2f1ef"/>
+  <g stroke="#d8d5d0" stroke-width="4">
+    <line x1="0" y1="0" x2="1200" y2="1200"/>
+    <line x1="1200" y1="0" x2="0" y2="1200"/>
+  </g>
+  <text x="600" y="560" font-family="Georgia, serif" font-size="64" fill="#c4704b" text-anchor="middle">Cinerea</text>
+  <text x="600" y="640" font-family="Arial, sans-serif" font-size="28" fill="#9b9893" text-anchor="middle">Immagine placeholder — sostituire con il lavoro</text>
+</svg>
