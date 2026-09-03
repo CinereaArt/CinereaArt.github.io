@@ -8,15 +8,15 @@ const email = 'favillaagnese@gmail.com';
 const emailLink = `mailto:${email}`;
 ---
 
-<BaseLayout title="Contact" description="Contatta Agnese Favilla (Cinerea) per collaborazioni editoriali e game projects.">
+<BaseLayout title="Contact" description="Contact Agnese Favilla (Cinerea) for editorial and game projects.">
   <section class="section">
     <div class="container contact">
       <div class="contact__intro">
         <span class="overline">Contact</span>
         <h1 class="contact__title">Let’s work together</h1>
         <p>
-          Hai un progetto editoriale, un albo illustrato o un gioco in sviluppo?
-          Raccontami l'idea — rispondo solitamente entro 2&ndash;3 giorni lavorativi.
+          Do you have an editorial project, a picture book or a game in development?
+          Tell me about the idea — I usually reply within 2&ndash;3 business days.
         </p>
         <ul class="contact__details">
           <li>
@@ -25,14 +25,14 @@ const emailLink = `mailto:${email}`;
           </li>
           <li>
             <strong>Social</strong>
-            <span>Instagram — Behance — ArtStation</span>
+            <span>Instagram — Behance</span>
           </li>
         </ul>
       </div>
 
       <form class="contact__form" method="post" action={emailLink}>
         <div class="contact__field">
-          <label for="name">Nome</label>
+          <label for="name">Name</label>
           <input type="text" id="name" name="name" required autocomplete="name" />
         </div>
 
@@ -42,22 +42,22 @@ const emailLink = `mailto:${email}`;
         </div>
 
         <div class="contact__field">
-          <label for="subject">Tipo di progetto</label>
+          <label for="subject">Project type</label>
           <select id="subject" name="subject">
             <option>Children's Illustration</option>
             <option>Editorial Illustration</option>
             <option>Game Art / Character Design</option>
-            <option>Altro</option>
+            <option>Other</option>
           </select>
         </div>
 
         <div class="contact__field">
-          <label for="message">Messaggio</label>
+          <label for="message">Message</label>
           <textarea id="message" name="body" rows="6" required></textarea>
         </div>
 
         <button class="btn btn--accent" type="submit">Send message</button>
-        <p class="contact__note">Il form apre il tuo client email con il messaggio già composto.</p>
+        <p class="contact__note">The form opens your email client with the message ready to send.</p>
       </form>
     </div>
   </section>

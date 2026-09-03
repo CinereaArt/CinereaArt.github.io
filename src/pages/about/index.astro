@@ -10,33 +10,33 @@ const publishers = (await getCollection('publishers'))
   .sort((a, b) => (a.data.order || 0) - (b.data.order || 0));
 ---
 
-<BaseLayout title="About" description="Chi è Agnese Favilla (Cinerea): illustratrice e game artist. Bio, esperienza e clienti.">
+<BaseLayout title="About" description="Who is Agnese Favilla (Cinerea): illustrator and game artist. Bio and experience.">
   <section class="section">
     <div class="container about">
       <div class="about__media">
-        <img src="/images/portfolio/cinerea.webp" alt="Ritratto di Agnese Favilla (Cinerea)" loading="lazy" decoding="async" />
+        <img src="/images/portfolio/cinerea.webp" alt="Portrait of Agnese Favilla (Cinerea)" loading="lazy" decoding="async" />
       </div>
 
       <div class="about__body">
         <span class="overline">About</span>
         <h1 class="about__title">Agnese Favilla</h1>
-        <p class="about__aka">in arte <strong>Cinerea</strong></p>
+        <p class="about__aka">also known as <strong>Cinerea</strong></p>
 
         <div class="about__text">
           <p>
-            Sono un'illustratrice e game artist. Mi muovo tra due mondi che amo molto:
-            la <strong>narrazione illustrata</strong> — dagli albi per l'infanzia
-            all'editoriale per un pubblico adulto — e la <strong>game art</strong>,
-            dove do forma a personaggi e mondi per il settore videoludico.
+            I'm an illustrator and game artist. I move between two worlds I love:
+            <strong>illustrated storytelling</strong> — from picture books for
+            children to editorial work for an adult audience — and <strong>game art</strong>,
+            where I give shape to characters and worlds for the videogame industry.
           </p>
           <p>
-            Ogni progetto parte sempre dalla storia: che sia una pagina di un
-            picture book o un concept per un personaggio, cerco di costruire
-            un'immagine che parli, emozioni e viva oltre lo schermo o la carta.
+            Every project starts from the story: whether it's a page in a
+            picture book or a character concept, I aim to build an image that
+            speaks, moves and lives beyond the screen or the page.
           </p>
           <p>
-            Lavoro con editori, studi di gioco e clienti editoriali, sia in
-            Italia che all'estero.
+            I work with publishers, game studios and editorial clients, both in
+            Italy and abroad.
           </p>
         </div>
 
@@ -47,27 +47,23 @@ const publishers = (await getCollection('publishers'))
     </div>
   </section>
 
-  <!-- Skills / aree -->
+  <!-- Disciplines / areas -->
   <section class="section section--alt">
     <div class="container">
-      <span class="overline">Cosa faccio</span>
-      <h2 class="section-title">Discipline</h2>
+      <span class="overline">What I do</span>
+      <h2 class="section-title">Disciplines</h2>
       <div class="skills">
         <div class="skill-card">
           <h3>Children's Illustration</h3>
-          <p>Albi illustrati, picture books, copertine e spot per l'infanzia.</p>
+          <p>Picture books, covers and spot illustrations for children.</p>
         </div>
         <div class="skill-card">
           <h3>Editorial Illustration</h3>
-          <p>Riviste, copertine, libri e illustrazioni per un pubblico adulto.</p>
+          <p>Magazines, covers, books and illustrations for an adult audience.</p>
         </div>
         <div class="skill-card">
           <h3>Character Design</h3>
-          <p>Personaggi, turnaround, color exploration e concept per giochi.</p>
-        </div>
-        <div class="skill-card">
-          <h3>Environment &amp; Props</h3>
-          <p>Ambienti, props e mondo visuale per il settore videoludico.</p>
+          <p>Characters, turnarounds, color explorations and concepts for games.</p>
         </div>
       </div>
     </div>
@@ -76,8 +72,8 @@ const publishers = (await getCollection('publishers'))
   <!-- ================= PUBBLICAZIONI ================= -->
   <section class="section">
     <div class="container">
-      <span class="overline">Pubblicazioni</span>
-      <h2 class="section-title">Libri &amp; pubblicazioni</h2>
+      <span class="overline">Publications</span>
+      <h2 class="section-title">Books &amp; publications</h2>
       <div class="pub-list">
         {publications.length > 0 ? (
           publications.map((p) => (
@@ -91,22 +87,22 @@ const publishers = (await getCollection('publishers'))
                 <p class="pub-item__body">{p.body}</p>
               </div>
               {p.data.link && (
-                <a class="pub-item__link" href={p.data.link} target="_blank" rel="noopener">Vedi →</a>
+                <a class="pub-item__link" href={p.data.link} target="_blank" rel="noopener">View →</a>
               )}
             </article>
           ))
         ) : (
-          <p class="empty-msg">Le pubblicazioni saranno elencate qui.</p>
+          <p class="empty-msg">Publications will be listed here.</p>
         )}
       </div>
     </div>
   </section>
 
-  <!-- ================= CASE EDITRICI ================= -->
+  <!-- ================= PUBLISHERS ================= -->
   <section class="section section--alt">
     <div class="container">
-      <span class="overline">Collaborazioni</span>
-      <h2 class="section-title">Case editrici</h2>
+      <span class="overline">Collaborations</span>
+      <h2 class="section-title">Publishers</h2>
       <div class="publisher-grid">
         {publishers.length > 0 ? (
           publishers.map((p) => (
@@ -116,7 +112,7 @@ const publishers = (await getCollection('publishers'))
             </a>
           ))
         ) : (
-          <p class="empty-msg">Le case editrici saranno elencate qui.</p>
+          <p class="empty-msg">Publishers will be listed here.</p>
         )}
       </div>
     </div>

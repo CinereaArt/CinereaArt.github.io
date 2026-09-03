@@ -4,8 +4,8 @@ category: "illustration"
 subcategory: "editorial"
 format: "editorial"
 date: 2026-01-01
-description: "B&N Illustration 7 — opera di Agnese Favilla (Cinerea)."
-tags: ['"bianco e nero"', '"editoriale"']
+description: "B&N Illustration 7 — work by Agnese Favilla (Cinerea)."
+tags: ['"black and white"', '"editorial"']
 image: "/images/thumbnails/portfolio7.webp"
 imageFull: "/images/portfolio/portfolio7.webp"
 ---

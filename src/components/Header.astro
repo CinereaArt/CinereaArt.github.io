@@ -1,6 +1,6 @@
 ---
 // Header — navigazione principale
-// Desktop: logo + nav orizzontale (Illustration▾, Game Art, About, Contact)
+// Desktop: logo + nav orizzontale (Children’s, Editorial, Game Art, About, Contact)
 // Mobile: hamburger + menu full-screen overlay
 
 const navLinks = [
@@ -18,20 +18,11 @@ const navLinks = [
     <!-- Navigazione desktop -->
     <nav class="site-nav" aria-label="Navigazione principale">
       <ul class="site-nav__list">
-        <li class="site-nav__item site-nav__item--has-dropdown">
-          <a href="/illustration/children" class="site-nav__link">
-            Illustration
-            <svg class="site-nav__chevron" width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
-              <path d="M2.5 4.5L6 8l3.5-3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </a>
-          <ul class="site-nav__dropdown" role="menu">
-            {navLinks.map((link) => (
-              <li role="none">
-                <a class="site-nav__dropdown-link" href={link.href} role="menuitem">{link.label}</a>
-              </li>
-            ))}
-          </ul>
+        <li class="site-nav__item">
+          <a href="/illustration/children" class="site-nav__link">Children’s Illustration</a>
+        </li>
+        <li class="site-nav__item">
+          <a href="/illustration/editorial" class="site-nav__link">Editorial Illustration</a>
         </li>
         <li class="site-nav__item">
           <a href="/game-art" class="site-nav__link">Game Art</a>
@@ -46,7 +37,7 @@ const navLinks = [
     </nav>
 
     <!-- Hamburger mobile -->
-    <button class="site-header__toggle" data-menu-toggle aria-expanded="false" aria-controls="mobile-menu" aria-label="Apri menù">
+    <button class="site-header__toggle" data-menu-toggle aria-expanded="false" aria-controls="mobile-menu" aria-label="Open menu">
       <span class="site-header__toggle-bar"></span>
       <span class="site-header__toggle-bar"></span>
       <span class="site-header__toggle-bar"></span>
@@ -57,15 +48,13 @@ const navLinks = [
   <div class="mobile-menu" id="mobile-menu" data-mobile-menu>
     <nav class="mobile-menu__nav" aria-label="Navigazione mobile">
       <ul class="mobile-menu__list">
-        <li class="mobile-menu__group">Illustration</li>
         {navLinks.map((link) => (
           <li class="mobile-menu__item" key={link.href}>
             <a class="mobile-menu__link" href={link.href}>{link.label}</a>
           </li>
         ))}
-        <li class="mobile-menu__group">Game Art</li>
         <li class="mobile-menu__item">
-          <a class="mobile-menu__link" href="/game-art">Game Art &amp; Character Design</a>
+          <a class="mobile-menu__link" href="/game-art">Game Art</a>
         </li>
         <li class="mobile-menu__item">
           <a class="mobile-menu__link" href="/about">About</a>
@@ -76,8 +65,7 @@ const navLinks = [
       </ul>
       <div class="mobile-menu__social">
         <a href="https://www.instagram.com/cinerea__/" target="_blank" rel="noopener noreferrer">Instagram</a>
-        <a href="https://www.instagram.com/cinerea__/" target="_blank" rel="noopener noreferrer">Behance</a>
-        <a href="https://www.instagram.com/cinerea__/" target="_blank" rel="noopener noreferrer">ArtStation</a>
+        <a href="https://www.behance.net/agnesefavilla" target="_blank" rel="noopener noreferrer">Behance</a>
       </div>
     </nav>
   </div>
@@ -240,54 +228,6 @@ const navLinks = [
 
     .site-nav__link:hover::after {
       width: 100%;
-    }
-
-    .site-nav__chevron {
-      transition: transform var(--transition-base);
-    }
-
-    /* Dropdown */
-    .site-nav__item--has-dropdown {
-      position: relative;
-    }
-
-    .site-nav__dropdown {
-      position: absolute;
-      top: 100%;
-      left: 0;
-      min-width: 220px;
-      background: var(--color-bg);
-      border: 1px solid var(--color-surface);
-      border-radius: var(--radius);
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-      padding: var(--space-2);
-      opacity: 0;
-      visibility: hidden;
-      transform: translateY(8px);
-      transition: all var(--transition-base);
-    }
-
-    .site-nav__item--has-dropdown:hover .site-nav__dropdown,
-    .site-nav__item--has-dropdown:focus-within .site-nav__dropdown {
-      opacity: 1;
-      visibility: visible;
-      transform: translateY(0);
-    }
-
-    .site-nav__item--has-dropdown:hover .site-nav__chevron {
-      transform: rotate(180deg);
-    }
-
-    .site-nav__dropdown-link {
-      display: block;
-      padding: var(--space-2) var(--space-3);
-      font-size: 0.875rem;
-      border-radius: var(--radius);
-    }
-
-    .site-nav__dropdown-link:hover {
-      background: var(--color-surface);
-      color: var(--color-accent);
     }
   }
 </style>

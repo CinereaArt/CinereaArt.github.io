@@ -25,7 +25,7 @@ const { title, description, works, filters, layout = 'regular' } = Astro.props;
       {description && <p class="work-section__desc">{description}</p>}
 
       {filters && filters.length > 0 && (
-        <div class="chips" role="group" aria-label="Filtra per tipo">
+        <div class="chips" role="group" aria-label="Filter by type">
           {filters.map((f, i) => (
             <button class="chip" data-filter={f.value} data-active={i === 0 ? 'true' : 'false'}>
               {f.label}
