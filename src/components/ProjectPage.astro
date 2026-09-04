@@ -1,6 +1,8 @@
 ---
 // ProjectPage — layout per la pagina di un singolo lavoro/progetto
 // Trovabile a /illustration/children/[slug], /illustration/editorial/[slug], /game-art/[slug]
+import Lightbox from './Lightbox.astro';
+
 interface Props {
   title: string;
   category: string;
@@ -9,14 +11,18 @@ interface Props {
   role?: string;
   description?: string;
   gallery: { src: string; alt: string }[];
+  backHref?: string;   // path della sezione a cui tornare (es. /illustration/children/)
+  backLabel?: string;  // etichetta del link "Back" (es. "Children's Illustration")
 }
-const { title, category, client, year, role, description, gallery } = Astro.props;
+const { title, category, client, year, role, description, gallery, backHref, backLabel } = Astro.props;
+const backPath = backHref || '../';
+const backText = backLabel || category;
 ---
 
 <section class="section">
   <div class="container project">
     <nav class="project__back">
-      <a href={`../`}>&larr; Back to {category}</a>
+      <a href={backPath}>&larr; Back to {backText}</a>
     </nav>
 
     <header class="project__head">
@@ -31,7 +37,7 @@ const { title, category, client, year, role, description, gallery } = Astro.prop
 
     <div class="project__gallery">
       {gallery.map((g, i) => (
-        <figure class="project__shot" data-glightbox>
+        <figure class="project__shot">
           <a href={g.src} data-lightbox aria-label={g.alt}>
             <img
               src={g.src}
@@ -43,12 +49,9 @@ const { title, category, client, year, role, description, gallery } = Astro.prop
         </figure>
       ))}
     </div>
-
-    <nav class="project__nav">
-      <a class="btn" href="../">&larr; Previous</a>
-      <a class="btn" href="../">Next &rarr;</a>
-    </nav>
   </div>
+
+  <Lightbox />
 </section>
 
 <style>
@@ -94,30 +97,27 @@ const { title, category, client, year, role, description, gallery } = Astro.prop
   }
 
   .project__gallery {
-    display: grid;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     gap: var(--space-5);
   }
 
   .project__shot {
-    overflow: hidden;
-    border-radius: var(--radius);
-    background: var(--color-surface);
+    width: 100%;
   }
 
   .project__shot a {
-    display: block;
+    display: flex;
+    justify-content: center;
     cursor: zoom-in;
   }
 
   .project__shot img {
-    width: 100%;
+    max-width: 100%;
+    max-height: 78vh;
+    width: auto;
     height: auto;
-  }
-
-  .project__nav {
-    display: flex;
-    justify-content: space-between;
-    gap: var(--space-3);
-    margin-top: var(--space-8);
+    object-fit: contain;
   }
 </style>

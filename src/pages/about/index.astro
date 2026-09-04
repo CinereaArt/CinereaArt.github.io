@@ -70,13 +70,13 @@ const publishers = (await getCollection('publishers'))
   </section>
 
   <!-- ================= PUBBLICAZIONI ================= -->
-  <section class="section">
-    <div class="container">
-      <span class="overline">Publications</span>
-      <h2 class="section-title">Books &amp; publications</h2>
-      <div class="pub-list">
-        {publications.length > 0 ? (
-          publications.map((p) => (
+  {publications.length > 0 && (
+    <section class="section">
+      <div class="container">
+        <span class="overline">Publications</span>
+        <h2 class="section-title">Books &amp; publications</h2>
+        <div class="pub-list">
+          {publications.map((p) => (
             <article class="pub-item">
               <div class="pub-item__main">
                 <h3 class="pub-item__title">{p.data.title}</h3>
@@ -90,33 +90,29 @@ const publishers = (await getCollection('publishers'))
                 <a class="pub-item__link" href={p.data.link} target="_blank" rel="noopener">View →</a>
               )}
             </article>
-          ))
-        ) : (
-          <p class="empty-msg">Publications will be listed here.</p>
-        )}
+          ))}
+        </div>
       </div>
-    </div>
-  </section>
+    </section>
+  )}
 
   <!-- ================= PUBLISHERS ================= -->
-  <section class="section section--alt">
-    <div class="container">
-      <span class="overline">Collaborations</span>
-      <h2 class="section-title">Publishers</h2>
-      <div class="publisher-grid">
-        {publishers.length > 0 ? (
-          publishers.map((p) => (
+  {publishers.length > 0 && (
+    <section class="section section--alt">
+      <div class="container">
+        <span class="overline">Collaborations</span>
+        <h2 class="section-title">Publishers</h2>
+        <div class="publisher-grid">
+          {publishers.map((p) => (
             <a class="publisher-card" href={p.data.url || '#'} target="_blank" rel="noopener">
               <h3 class="publisher-card__name">{p.data.name}</h3>
               {p.data.note && <p class="publisher-card__note">{p.data.note}</p>}
             </a>
-          ))
-        ) : (
-          <p class="empty-msg">Publishers will be listed here.</p>
-        )}
+          ))}
+        </div>
       </div>
-    </div>
-  </section>
+    </section>
+  )}
 </BaseLayout>
 
 <style>

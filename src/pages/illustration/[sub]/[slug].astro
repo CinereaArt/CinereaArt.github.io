@@ -18,6 +18,7 @@ export async function getStaticPaths() {
 
 const { work } = Astro.props;
 const data = work.data;
+const sub = Astro.params.sub || 'children';
 const mainImage = data.imageFull || data.image || '/images/portfolio/placeholder.svg';
 
 // Se il progetto è stato generato dallo script ha una galleria completa;
@@ -39,5 +40,7 @@ const gallery = data.gallery && data.gallery.length > 0
     role={data.role}
     description={data.description}
     gallery={gallery}
+    backHref={`/illustration/${data.subcategory || 'children'}/`}
+    backLabel={data.subcategory === 'children' ? "Children's Illustration" : "Editorial Illustration"}
   />
 </BaseLayout>

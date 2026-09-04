@@ -8,13 +8,15 @@ interface Props {
     title: string;
     image: string;       // percorso thumb
     fullImage?: string;  // percorso full per lightbox
+    slug?: string;       // se presente, la card linka alla project page (/{slug})
     format?: string;     // per filtri (es. picture-book, cover, spot)
     tags?: string[];
   }[];
   filters?: { value: string; label: string }[];
   layout?: 'masonry' | 'regular' | 'gameart';
+  basePath?: string;     // path della sezione corrente (es. "/illustration/children/")
 }
-const { title, description, works, filters, layout = 'regular' } = Astro.props;
+const { title, description, works, filters, layout = 'regular', basePath = '' } = Astro.props;
 ---
 
 <section class="work-section section">
@@ -23,26 +25,27 @@ const { title, description, works, filters, layout = 'regular' } = Astro.props;
       <span class="overline">Portfolio</span>
       <h1 class="work-section__title">{title}</h1>
       {description && <p class="work-section__desc">{description}</p>}
-
-      {filters && filters.length > 0 && (
-        <div class="chips" role="group" aria-label="Filter by type">
-          {filters.map((f, i) => (
-            <button class="chip" data-filter={f.value} data-active={i === 0 ? 'true' : 'false'}>
-              {f.label}
-            </button>
-          ))}
-        </div>
-      )}
     </header>
 
     <div class={`grid grid--${layout}`} style={layout === 'masonry' ? 'grid-auto-rows: 10px;' : undefined}>
-      {works.map((w, i) => (
-        <figure class="card" data-item data-format={w.format || ''} data-tags={(w.tags || []).join(' ')}>
-          <a class="card__media" href={w.fullImage || w.image} data-lightbox aria-label={w.title}>
-            <img src={w.image} alt={w.title} loading={i < 4 ? 'eager' : 'lazy'} decoding="async" />
-          </a>
-        </figure>
-      ))}
+      {works.map((w, i) =>
+        w.slug ? (
+          <figure class="card card--project" data-item data-format={w.format || ''} data-tags={(w.tags || []).join(' ')}>
+            <a class="card__media card__link" href={`${basePath}${w.slug}`} aria-label={`${w.title} — open project`}>
+              <img src={w.image} alt={w.title} loading={i < 4 ? 'eager' : 'lazy'} decoding="async" />
+            </a>
+            <figcaption class="card__title">
+              <span class="card__title-text">{w.title}</span>
+            </figcaption>
+          </figure>
+        ) : (
+          <figure class="card" data-item data-format={w.format || ''} data-tags={(w.tags || []).join(' ')}>
+            <a class="card__media" href={w.fullImage || w.image} data-lightbox aria-label={w.title}>
+              <img src={w.image} alt={w.title} loading={i < 4 ? 'eager' : 'lazy'} decoding="async" />
+            </a>
+          </figure>
+        )
+      )}
     </div>
   </div>
 </section>
@@ -63,37 +66,6 @@ const { title, description, works, filters, layout = 'regular' } = Astro.props;
     margin-bottom: var(--space-5);
   }
 
-  /* ---------- Chips / filtri ---------- */
-  .chips {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-2);
-    margin-top: var(--space-3);
-  }
-
-  .chip {
-    padding: var(--space-2) var(--space-4);
-    font-size: 0.8125rem;
-    font-weight: 500;
-    border: 1px solid var(--color-border);
-    border-radius: 999px;
-    background: transparent;
-    color: var(--color-text);
-    cursor: pointer;
-    transition: all var(--transition-base);
-  }
-
-  .chip:hover {
-    border-color: var(--color-accent);
-    color: var(--color-accent);
-  }
-
-  .chip[data-active='true'] {
-    background: var(--color-text);
-    border-color: var(--color-text);
-    color: var(--color-bg);
-  }
-
   /* ---------- Card ---------- */
   .card {
     border-radius: var(--radius);
@@ -102,16 +74,34 @@ const { title, description, works, filters, layout = 'regular' } = Astro.props;
     margin-bottom: var(--space-4);
   }
 
-  .card.is-hidden {
-    display: none;
-  }
-
   .card__media {
     display: block;
     overflow: hidden;
     aspect-ratio: 4 / 5;
     cursor: zoom-in;
     background: var(--color-surface);
+  }
+
+  .card__media.card__link {
+    cursor: pointer;
+  }
+
+  /* Card progetto: titolo sotto l'immagine */
+  .card--project .card__media {
+    aspect-ratio: 4 / 3;
+  }
+
+  .card__title {
+    padding: var(--space-3) var(--space-4) var(--space-4);
+    background: var(--color-surface);
+  }
+
+  .card__title-text {
+    font-size: 1.125rem;
+    font-weight: 600;
+    line-height: 1.2;
+    color: var(--color-text);
+    display: block;
   }
 
   .card__media img {
@@ -154,25 +144,3 @@ const { title, description, works, filters, layout = 'regular' } = Astro.props;
     grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
   }
 </style>
-
-<script>
-  // Filtri client-side (chips)
-  const chips = document.querySelectorAll('[data-filter]');
-  const items = document.querySelectorAll('[data-item]');
-
-  chips.forEach((chip) => {
-    chip.addEventListener('click', () => {
-      // Aggiorna stato attivo del pulsante
-      chips.forEach((c) => c.setAttribute('data-active', c === chip ? 'true' : 'false'));
-
-      const filter = chip.dataset.filter;
-      items.forEach((item) => {
-        const format = item.dataset.format || '';
-        const tags = item.dataset.tags || '';
-        const match =
-          filter === 'all' || format === filter || tags.split(' ').includes(filter);
-        item.classList.toggle('is-hidden', !match);
-      });
-    });
-  });
-</script>

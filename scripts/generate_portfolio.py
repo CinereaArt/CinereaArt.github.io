@@ -68,10 +68,15 @@ SECTIONS = {
 # Raster supportati
 ALLOWED_EXT = {".jpg", ".jpeg", ".png", ".webp", ".tiff", ".bmp"}
 
-# Dimensioni max (lato lungo) e qualità WebP (coerenti con optimize_images.py)
+# Dimensioni max (lato lungo) e qualità WebP
 THUMB_MAX = 600
-FULL_MAX = 1600
+FULL_MAX = 1200  # ridotto da 1600 per protezione anti-ai (Opzione B)
 WEBP_QUALITY = 82
+
+# Protezione immagini
+WATERMARK_TEXT = "© Agnese Favilla — cinerea.eu"
+WATERMARK_OPACITY = 35  # 0=trasparente, 255=opaco; 35 è quasi invisibile a occhio nudo
+COPYRIGHT_NOTICE = "Copyright © Agnese Favilla (Cinerea) — cinerea.eu — All rights reserved"
 
 # Etichetta di cui i .md generati sono riconoscibili dentro portfolio/
 # (per pulizia idempotente). Si lega al prefisso del nome file.
@@ -102,7 +107,8 @@ def slugify(name: str) -> str:
 
 
 def optimize_image(src: Path, thumb_path: Path, full_path: Path) -> bool:
-    """Ottimizza una singola immagine -> thumb + full WebP. True se riuscita."""
+    """Ottimizza una singola immagine -> thumb + full WebP. True se riuscita.
+    La full-size image riceve un watermark semi-trasparente e copyright EXIF."""
     try:
         with Image.open(src) as im:
             if im.mode in ("RGBA", "LA"):
@@ -110,11 +116,18 @@ def optimize_image(src: Path, thumb_path: Path, full_path: Path) -> bool:
             else:
                 im = im.convert("RGB")
 
+            # --- Full image: watermark (DISATTIVATO su richiesta) + copyright EXIF ---
             full = im.copy()
             full.thumbnail((FULL_MAX, FULL_MAX), Image.LANCZOS)
+            # watermark disattivato (dec. 2026-09-04): riattivare con:
+            # full = _apply_watermark(full)
             full_path.parent.mkdir(parents=True, exist_ok=True)
-            full.save(full_path, "WEBP", quality=WEBP_QUALITY, method=6)
+            full.save(
+                full_path, "WEBP", quality=WEBP_QUALITY, method=6,
+                exif=_build_exif_copyright(),
+            )
 
+            # --- Thumbnail (no watermark, leggera) ---
             thumb = im.copy()
             thumb.thumbnail((THUMB_MAX, THUMB_MAX), Image.LANCZOS)
             thumb_path.parent.mkdir(parents=True, exist_ok=True)
@@ -123,6 +136,66 @@ def optimize_image(src: Path, thumb_path: Path, full_path: Path) -> bool:
     except Exception as e:  # noqa: BLE001
         print(f"      [ERRORE immagine] {src.name}: {e}", file=sys.stderr)
         return False
+
+
+def _apply_watermark(im: Image.Image) -> Image.Image:
+    """Aggiunge un watermark testo semi-trasparente in basso a destra."""
+    from PIL import ImageDraw, ImageFont
+
+    w, h = im.size
+
+    # Crea overlay RGBA trasparente
+    overlay = Image.new("RGBA", (w, h), (0, 0, 0, 0))
+    draw = ImageDraw.Draw(overlay, "RGBA")
+
+    # Font: usa il default di sistema, dimensione proporzionale
+    font_size = max(12, int(h * 0.022))
+    try:
+        font = ImageFont.truetype("/usr/share/fonts/google-noto/NotoSans-Regular.ttf", font_size)
+    except (OSError, IOError):
+        try:
+            font = ImageFont.truetype("/usr/share/fonts/dejavu-sans-fonts/DejaVuSans.ttf", font_size)
+        except (OSError, IOError):
+            font = ImageFont.load_default()
+
+    # Misura il testo
+    bbox = draw.textbbox((0, 0), WATERMARK_TEXT, font=font)
+    tw = bbox[2] - bbox[0]
+    th = bbox[3] - bbox[1]
+
+    # Posiziona: 2% dal bordo destro, 95% in basso
+    margin_x = int(w * 0.02)
+    margin_y = int(h * 0.03)
+    x = w - tw - margin_x
+    y = h - th - margin_y
+
+    # Disegna ombra leggera + testo semi-trasparente (bianco, alpha = WATERMARK_OPACITY)
+    shadow_color = (0, 0, 0, int(WATERMARK_OPACITY * 0.6))
+    text_color = (255, 255, 255, WATERMARK_OPACITY)
+    draw.text((x + 1, y + 1), WATERMARK_TEXT, font=font, fill=shadow_color)
+    draw.text((x, y), WATERMARK_TEXT, font=font, fill=text_color)
+
+    # Composita l'overlay trasparente sull'immagine (preserva RGB)
+    im_rgba = im.convert("RGBA")
+    result = Image.alpha_composite(im_rgba, overlay)
+    return result.convert("RGB")
+
+
+def _build_exif_copyright() -> bytes:
+    """Costruisce dati EXIF minimi con copyright per l'immagine WebP."""
+    import io
+    # Pillow EXIF: crea un'immagine temporanea con EXIF e leggi i bytes
+    tmp = Image.new("RGB", (1, 1))
+    exif_data = tmp.getexif()
+    # Tag 33434 = ExposureTime, 33437 = FNumber — ignoro
+    # Tag 33432 = Copyright
+    exif_data[0x8298] = COPYRIGHT_NOTICE  # 0x8298 = Copyright
+    # Tag 0x0131 = Software
+    exif_data[0x0131] = "CinereaArt Portfolio Generator"
+    buf = io.BytesIO()
+    exif_data.tobytes()  # forza serializzazione
+    # Return raw EXIF bytes for WebP
+    return exif_data.tobytes()
 
 
 # ---------------------------------------------------------------------------

@@ -33,6 +33,12 @@ const fullTitle = title.startsWith('Cinerea')
     <meta name="description" content={description} />
     <link rel="canonical" href={Astro.url} />
 
+    <!-- Anti-AI training / indexing opt-out -->
+    <meta name="robots" content="noimageindex, max-image-preview:large" />
+    <meta name="robots" content="noai" />
+    <meta name="noai" content="noai" />
+    <meta name="nocrawl" content="nocrawl" />
+
     <!-- Open Graph (social sharing) -->
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="Cinerea — Agnese Favilla" />

@@ -8,7 +8,8 @@
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "optimize": "python3 scripts/optimize_images.py"
+    "optimize": "python3 scripts/generate_portfolio.py",
+    "optimize:legacy": "python3 scripts/optimize_images.py"
   },
   "dependencies": {
     "astro": "^5.0.0"

@@ -14,6 +14,7 @@ const mapped = works
     title: w.data.title,
     image: w.data.image || '/images/thumbnails/placeholder.svg',
     fullImage: w.data.imageFull || w.data.image || '/images/portfolio/placeholder.svg',
+    slug: w.slug,
     format: 'all',
     tags: [...w.data.tags],
   }));
@@ -28,5 +29,6 @@ const filters = [{ value: 'all', label: 'All' }];
     works={mapped}
     filters={filters}
     layout="regular"
+    basePath="/illustration/editorial/"
   />
 </BaseLayout>

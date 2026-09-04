@@ -1,0 +1,21 @@
+---
+title: "Storie di Cenere"
+category: "illustration"
+subcategory: "children"
+group: "generated-children"
+image: "/images/thumbnails/children/storie-di-cenere/01-page.webp"
+imageFull: "/images/portfolio/children/storie-di-cenere/01-page.webp"
+gallery:
+  - src: "/images/portfolio/children/storie-di-cenere/01-page.webp"
+    alt: "Storie di Cenere — immagine 1"
+  - src: "/images/portfolio/children/storie-di-cenere/02-page.webp"
+    alt: "Storie di Cenere — immagine 2"
+  - src: "/images/portfolio/children/storie-di-cenere/03-page.webp"
+    alt: "Storie di Cenere — immagine 3"
+  - src: "/images/portfolio/children/storie-di-cenere/04-page.webp"
+    alt: "Storie di Cenere — immagine 4"
+  - src: "/images/portfolio/children/storie-di-cenere/05-page.webp"
+    alt: "Storie di Cenere — immagine 5"
+  - src: "/images/portfolio/children/storie-di-cenere/06-page.webp"
+    alt: "Storie di Cenere — immagine 6"
+---

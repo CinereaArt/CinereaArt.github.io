@@ -9,6 +9,14 @@ dist/
 *.log
 npm-debug.log*
 
+# Python
+__pycache__/
+*.py[cod]
+
+# Glaze scartato (decisione 2026-09-04): script non più usati
+scripts/apply_glaze.py
+scripts/glaze_linux.py
+
 # Sistema
 .DS_Store
 Thumbs.db
@@ -16,3 +24,6 @@ Thumbs.db
 # Immagini originali (non versionate — le ottimizzate vanno in public/images)
 assets/originals/
 assets/portfolio/
+
+# Output Glaze (scartato 2026-09-04, rimosso da tracking e disco)
+assets/protected/
